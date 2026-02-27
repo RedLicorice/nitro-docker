@@ -36,7 +36,8 @@ with open("../assets/gamedata/FurnitureData.json", encoding='utf-8') as f:
 with open("../assets/gamedata/ProductData.json", encoding='utf-8') as f:
     data = json.load(f)
     for furni in data["productdata"]["product"]:
-        known_names.append({"name": furni["name"], "classname": furni["code"]})
+        if furni and 'name' in furni and 'code' in furni:
+            known_names.append({"name": furni["name"], "classname": furni["code"]})
 
 
 seen = set()
