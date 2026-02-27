@@ -244,6 +244,8 @@ UPDATE website_settings SET `value` = '5' WHERE  `key` = 'min_maintenance_login_
 UPDATE website_settings SET `value` = '6' WHERE  `key` = 'min_housekeeping_rank';
 
 UPDATE website_settings SET `value` = '0' WHERE  `key` = 'cloudflare_turnstile_enabled';
+
+UPDATE website_settings SET `value` = '' WHERE  `key` = 'nitro_path';
 ```
 
 **ℹ Notice**: badgeparts generator must be set up in arcturus and all files must be synced with the badge_parts.nitro

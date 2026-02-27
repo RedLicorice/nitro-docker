@@ -9,7 +9,7 @@ http:
         - arcturus-strip-ws-prefix
       tls:
         certResolver: myresolver
-      priority: 1
+      priority: 10
 
   middlewares:
     arcturus-strip-ws-prefix:
