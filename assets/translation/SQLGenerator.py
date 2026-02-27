@@ -52,17 +52,29 @@ for dic in known_names_copy:
     known_names.append(dic)
     seen.add(key)
 
-with open("catalog_items.sql", "w", encoding='utf-8') as f:
-    f.write("SET collation_connection = 'latin1_swedish_ci';\n")
-    for furni in known_names:
-        # get rid of any unwanted characters for sql and remove non latin-1 characters
-        # check the collation of the table
-        if furni["name"] is None:
-            continue
-        furni_name = sqlescape(furni["name"].encode(
-            "latin-1", "ignore").decode("latin-1"))[:55]
-        classname = sqlescape(furni["classname"].encode(
-            "latin-1", "ignore").decode("latin-1"))
-        #f.write(f"UPDATE catalog_items ci SET ci.catalog_name = '{furni_name}' WHERE item_ids IN (SELECT CAST(id AS CHAR) FROM items_base WHERE item_name = '{classname}');\n")
-        f.write(
-            f"UPDATE catalog_items ci, (SELECT CAST(id AS CHAR) as id, item_name FROM items_base WHERE item_name = '{classname}') item SET ci.catalog_name = '{classname}' WHERE ci.item_ids = item.id;\n")
+updated_cnt=0
+updates = []
+for furni in known_names:
+    # get rid of any unwanted characters for sql and remove non latin-1 characters
+    # check the collation of the table
+    if not 'name' in furni or furni["name"] is None:
+        continue
+    updates.append(furni)
+
+if updates:
+    with open("catalog_items.sql", "w", encoding='utf-8') as f:
+        f.write("SET collation_connection = 'latin1_swedish_ci';\n")
+        for furni in updates:
+            furni_name = sqlescape(furni["name"].encode(
+                "latin-1", "ignore").decode("latin-1"))[:55]
+            classname = sqlescape(furni["classname"].encode(
+                "latin-1", "ignore").decode("latin-1"))
+            #f.write(f"UPDATE catalog_items ci SET ci.catalog_name = '{furni_name}' WHERE item_ids IN (SELECT CAST(id AS CHAR) FROM items_base WHERE item_name = '{classname}');\n")
+            f.write(
+                f"UPDATE catalog_items ci, (SELECT CAST(id AS CHAR) as id, item_name FROM items_base WHERE item_name = '{classname}') item SET ci.catalog_name = '{classname}' WHERE ci.item_ids = item.id;\n")
+            updated_cnt+=1
+
+if updated_cnt > 0:
+    print(f"catalog_items.sql updated!")
+else:
+    print(f"catalog_items.sql unchanged!")
