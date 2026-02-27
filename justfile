@@ -9,4 +9,4 @@ start-traefik:
   docker compose -f compose.yaml -f compose.traefik.yaml up
 
 stop:
-  docker compose -f compose.yaml -f compose.traefik.yaml up
+  docker compose -f compose.yaml -f compose.traefik.yaml down
