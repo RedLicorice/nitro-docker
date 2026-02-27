@@ -55,30 +55,30 @@ services:
       retries: 5
   
   arcturus:
-    # ports: 
-    #   - "2096:2096"
+    ports: 
+     - "127.0.0.1:2096:2096"
     networks: [nitro, traefik]
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik"
-      - "traefik.http.routers.pixels-arcturus.entrypoints=websecure"
-      - "traefik.http.routers.pixels-arcturus.rule=Host(`$TRAEFIK_VIRTUAL_HOST_ARCTURUS`) && PathPrefix(`/ws`)"
-      - "traefik.http.routers.pixels-arcturus.service=pixels-arcturus-ws"
-      - "traefik.http.services.pixels-arcturus-ws.loadbalancer.server.port=2096"
-      # Middleware StripPrefix: rimuove /nitro
-      - "traefik.http.middlewares.pixels-arcturus-ws-strip.stripprefix.prefixes=/ws"
-      - "traefik.http.routers.pixels-arcturus.middlewares=pixels-arcturus-ws-strip"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=traefik"
+    #   - "traefik.http.routers.pixels-arcturus.entrypoints=websecure"
+    #   - "traefik.http.routers.pixels-arcturus.rule=Host(`$TRAEFIK_VIRTUAL_HOST_ARCTURUS`) && PathPrefix(`/ws`)"
+    #   - "traefik.http.routers.pixels-arcturus.service=pixels-arcturus-ws"
+    #   - "traefik.http.services.pixels-arcturus-ws.loadbalancer.server.port=2096"
+    #   # Middleware StripPrefix: rimuove /nitro
+    #   - "traefik.http.middlewares.pixels-arcturus-ws-strip.stripprefix.prefixes=/ws"
+    #   - "traefik.http.routers.pixels-arcturus.middlewares=pixels-arcturus-ws-strip"
 
   nitro:
     ports: []
     networks: [nitro, traefik]
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik"
-      - "traefik.http.routers.pixels-nitro.entrypoints=websecure"
-      - "traefik.http.routers.pixels-nitro.rule=Host(`$TRAEFIK_VIRTUAL_HOST_NITRO`)"
-      - "traefik.http.routers.pixels-nitro.service=pixels-nitro-srv"
-      - "traefik.http.services.pixels-nitro-srv.loadbalancer.server.port=80"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=traefik"
+    #   - "traefik.http.routers.pixels-nitro.entrypoints=websecure"
+    #   - "traefik.http.routers.pixels-nitro.rule=Host(`$TRAEFIK_VIRTUAL_HOST_NITRO`)"
+    #   - "traefik.http.routers.pixels-nitro.service=pixels-nitro-srv"
+    #   - "traefik.http.services.pixels-nitro-srv.loadbalancer.server.port=80"
 
 
   db:
@@ -88,25 +88,25 @@ services:
   assets:
     ports: []
     networks: [nitro, traefik]
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik"
-      - "traefik.http.routers.pixels-assets.entrypoints=websecure"
-      - "traefik.http.routers.pixels-assets.rule=Host(`$TRAEFIK_VIRTUAL_HOST_ASSETS`)"
-      - "traefik.http.routers.pixels-assets.service=pixels-assets-srv"
-      - "traefik.http.services.pixels-assets-srv.loadbalancer.server.port=80"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=traefik"
+    #   - "traefik.http.routers.pixels-assets.entrypoints=websecure"
+    #   - "traefik.http.routers.pixels-assets.rule=Host(`$TRAEFIK_VIRTUAL_HOST_ASSETS`)"
+    #   - "traefik.http.routers.pixels-assets.service=pixels-assets-srv"
+    #   - "traefik.http.services.pixels-assets-srv.loadbalancer.server.port=80"
 
 
   cms:
     ports: []
     networks: [nitro, traefik]
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik"
-      - "traefik.http.routers.pixels-cms.entrypoints=websecure"
-      - "traefik.http.routers.pixels-cms.rule=Host(`$TRAEFIK_VIRTUAL_HOST_CMS`)"
-      - "traefik.http.routers.pixels-cms.service=pixels-cms-srv"
-      - "traefik.http.services.pixels-cms-srv.loadbalancer.server.port=80"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=traefik"
+    #   - "traefik.http.routers.pixels-cms.entrypoints=websecure"
+    #   - "traefik.http.routers.pixels-cms.rule=Host(`$TRAEFIK_VIRTUAL_HOST_CMS`)"
+    #   - "traefik.http.routers.pixels-cms.service=pixels-cms-srv"
+    #   - "traefik.http.services.pixels-cms-srv.loadbalancer.server.port=80"
 
 networks:
   nitro:

@@ -16,7 +16,6 @@ api:
 
 providers:
   docker:
-    enabled: false # Dynamic configuration from docker labels
     exposedByDefault: false
   file:
     directory: "/traefik/config/dynamic"
