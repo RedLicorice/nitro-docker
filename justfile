@@ -10,3 +10,7 @@ start-traefik:
 
 stop:
   docker compose -f compose.yaml -f compose.traefik.yaml down
+
+mknet:
+  docker network create nitro
+  docker network create traefik
