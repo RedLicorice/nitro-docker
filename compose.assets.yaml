@@ -3,7 +3,7 @@ services:
     image: nitro-converter
     build:
       context: assets
-    command: assets-build
+    command: assets-build --build
     env_file:
       - .env
     volumes:
