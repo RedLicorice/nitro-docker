@@ -110,5 +110,6 @@ services:
 
 networks:
   nitro:
+    external: true
   traefik:
     external: true

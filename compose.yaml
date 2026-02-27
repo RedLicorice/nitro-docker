@@ -145,3 +145,4 @@ services:
 
 networks:
   nitro:
+    external: true
