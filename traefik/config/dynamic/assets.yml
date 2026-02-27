@@ -4,7 +4,7 @@ http:
       entryPoints:
         - websecure
       rule: "Host(`squarello.duckdns.org`)"
-      service: "cms"
+      service: "assets"
       tls:
         certResolver: myresolver
       priority: 1
