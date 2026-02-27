@@ -112,5 +112,8 @@ if __name__ == "__main__":
             print("\nDetailed issues:")
             for issue in result['issues']:
                 print(f"  - Library '{issue['library_id']}': {issue['issue']}")
-    
+
     print("=" * 60)
+    if not result['success']:
+        print(f"Edit assets/assets/gamedata/FigureMap.json and delete the aforementioned entries.")
+    exit(0 if result['success'] else 1)

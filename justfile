@@ -34,6 +34,7 @@ get-assets:
 
 build-assets:
   docker compose -f compose.assets.yaml up
+  python3 ./assets/check_figuremap.py
 
 merge-items:
   cd assets/ && \
