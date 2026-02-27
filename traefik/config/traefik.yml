@@ -25,7 +25,7 @@ certificatesResolvers:
     acme:
       httpChallenge:
         entryPoint: web
-      email: "postmaster@playfury.io"
+      email: "postmaster@nongabbo.duckdns.org"
       storage: "/traefik/certs/acme/acme.json"
 
 serversTransports:
