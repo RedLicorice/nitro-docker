@@ -9,7 +9,7 @@ services:
     volumes:
       - ./assets/configuration.json:/app/configuration.json
       - ./assets/assets:/app/assets
-    restart: never
+    restart: no
     networks: [nitro]
 
 
