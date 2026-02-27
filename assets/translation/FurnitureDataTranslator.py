@@ -27,6 +27,7 @@ with open('gamedata/furnidata.json', 'r', encoding='utf-8') as f:
 
 with open('gamedata/productdata.json', 'r', encoding='utf-8') as f:
     product_data = json.load(f)
+    print(f"Downloaded productdata has: {len(product_data["productdata"]["product"])} items")
     for product in product_data["productdata"]["product"]:
         classname = normalize_classnames(product['code'])
         furniture_dict[classname] = {
@@ -35,6 +36,7 @@ with open('gamedata/productdata.json', 'r', encoding='utf-8') as f:
         }
         if str(furniture_dict[classname]['description']).endswith("desc"):
             furniture_dict[classname]['description'] = ""
+        print(f"Add downloaded: {furniture_dict[classname]['name']}")
 
 orig_furniture_data = {}
 # Load the JSON file
@@ -52,6 +54,7 @@ for todo_type in todo_types:
                 furnitype['specialtype'] = furniture_dict[classname]['specialtype']
 
 
+
 orig_product_dict = {}
 # Load the JSON file
 with open('../assets/gamedata/ProductData.json', 'r', encoding='utf-8') as f:
@@ -62,6 +65,7 @@ for product in orig_product_dict["productdata"]["product"]:
     if classname in furniture_dict:
         product['name'] = furniture_dict[classname]['name']
         product['description'] = furniture_dict[classname]['description']
+        print(f"Merge Existing: {furniture_dict[classname]['name']}")
 
 
 # Save the updated JSON file
