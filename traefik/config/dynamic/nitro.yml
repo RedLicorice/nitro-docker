@@ -3,13 +3,12 @@ http:
     nitro_client:
       entryPoints:
         - websecure
-      rule: "Host(`chasethe.duckdns.org`)
+      rule: "Host(`chasethe.duckdns.org`)"
       service: "nitro_client"
       tls:
         certResolver: myresolver
       priority: 1
-
-
+  
   services:
     nitro_client:
       loadBalancer:
