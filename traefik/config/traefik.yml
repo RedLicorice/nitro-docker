@@ -1,0 +1,34 @@
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      # Auto-redirect to HTTPS
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    address: ":443"
+
+api:
+  insecure: true
+
+providers:
+  docker:
+    enabled: false # Dynamic configuration from docker labels
+    exposedByDefault: false
+  file:
+    directory: "/traefik/config/dynamic"
+
+certificatesResolvers:
+  myresolver:
+    acme:
+      httpChallenge:
+        entryPoint: web
+      email: "postmaster@playfury.io"
+      storage: "/traefik/certs/acme/acme.json"
+
+serversTransports:
+  insecure-transport:
+    insecureSkipVerify: true
