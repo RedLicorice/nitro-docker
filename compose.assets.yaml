@@ -1,0 +1,18 @@
+services:
+  assets-build:
+    image: nitro-converter
+    build:
+      context: assets
+    command: assets-build
+    env_file:
+      - .env
+    volumes:
+      - ./assets/configuration.json:/app/configuration.json
+      - ./assets/assets:/app/assets
+    restart: never
+    networks: [nitro]
+
+
+networks:
+  nitro:
+    external: true
