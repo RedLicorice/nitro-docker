@@ -1,3 +1,8 @@
+# Changes
+
+Added Traefik and sample configuration using duckdns lol
+
+
 # Nitro Docker installation
 Nitro docker is a quick-to-setup docker environment for the [nitro client](https://github.com/billsonnn/nitro-react) with [Arcturus Community Emulator](https://git.krews.org/morningstar/Arcturus-Community). It can be run on Windows, Linux or OSX just with a few commands. It is inspired by [Holo5/nitro-docker](https://github.com/Holo5/nitro-docker).  
 The default configuration can run on localhost.
