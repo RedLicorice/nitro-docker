@@ -1,0 +1,17 @@
+http:
+  routers:
+    assets:
+      entryPoints:
+        - websecure
+      rule: "Host(`squarello.duckdns.org`)"
+      service: "cms"
+      tls:
+        certResolver: myresolver
+      priority: 1
+
+  services:
+    assets:
+      loadBalancer:
+        servers:
+          - url: "http://assets:80"
+        passHostHeader: true

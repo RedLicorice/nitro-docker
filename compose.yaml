@@ -9,7 +9,7 @@ services:
     ports:
       #- 3000:3000 # gameport
       #- 3001:3001 # rcon
-      - 2096:2096 # websocket port
+      - 127.0.0.1:2096:2096 # websocket port
     depends_on:
       - db
     restart: unless-stopped
@@ -25,10 +25,30 @@ services:
       - ./nitro/renderer-config.json:/usr/share/nginx/html/renderer-config.json
       - ./nitro/ui-config.json:/usr/share/nginx/html/ui-config.json
     ports:
-      - 3000:80
+      - 127.0.0.1:3000:80
     restart: unless-stopped
     networks: [nitro]
 
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass cms_redis_psw
+    volumes:
+      - ./db/redis_data:/data
+    ports:
+      - 127.0.0.1:6379:6379  # Host:Container
+    networks: [nitro]
+  
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    ports:
+      - 127.0.0.1:8025:8025  # Web UI (localhost:18025)
+      - 127.0.0.1:1025:1025  # SMTP server
+    networks: [nitro]
+    logging:
+      driver: "none"  # Log silenziosi
+    
   db:
     image: mysql:8
     depends_on:
@@ -36,7 +56,7 @@ services:
     env_file:
       - .env
     ports:
-      - 3310:3306
+      - 127.0.0.1:3306:3306
     volumes:
       - ./db/data:/var/lib/mysql
       - ./db/conf.d:/etc/mysql/conf.d
@@ -79,7 +99,7 @@ services:
     env_file:
       - .env
     ports:
-      - 8080:80
+      - 127.0.0.1:8080:80
     volumes:
       - ./assets/nginx:/etc/nginx/conf.d/
       - ./assets/:/usr/share/nginx/html
@@ -111,7 +131,7 @@ services:
       - assets
       - arcturus
     ports:
-      - "8081:8080"
+      - "127.0.0.1:8081:8080"
     volumes:
       - "./.cms.env:/var/www/html/.env"
       - "./atomcms/storage:/var/www/html/storage/app/public"

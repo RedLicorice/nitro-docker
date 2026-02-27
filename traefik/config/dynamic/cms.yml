@@ -1,0 +1,17 @@
+http:
+  routers:
+    cms:
+      entryPoints:
+        - websecure
+      rule: "Host(`nongabbo.duckdns.org`)"
+      service: "cms"
+      tls:
+        certResolver: myresolver
+      priority: 1
+
+  services:
+    cms:
+      loadBalancer:
+        servers:
+          - url: "http://cms:8080"
+        passHostHeader: true

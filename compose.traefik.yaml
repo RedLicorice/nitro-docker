@@ -1,9 +1,73 @@
 services:
+  traefik:
+    image: "traefik:v3.6.9"
+    container_name: "traefik"
+    restart: unless-stopped
+    command:
+      - "--configFile=/traefik/config/traefik.yml"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "127.0.0.1:8083:8080"
+    volumes:
+      - "./traefik:/traefik"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks: [traefik]
 
+  certdumper:
+    image: kereis/traefik-certs-dumper:multi-arch-builds-alpine
+    container_name: certdumper
+    restart: unless-stopped
+    network_mode: none
+    volumes:
+      #  Input folder which contains Traefik's `acme.json' file
+      - ./traefik/certs/acme:/input:ro
+      # Output folder
+      - ./traefik/certs/dumps:/output:rw
+      # Hook script
+      - ./traefik/certs/cert-dump-hook.sh:/dump-hook.sh:ro
+    environment:
+      # Paths
+      - ACME_FILE_PATH=/input/acme.json
+      - POST_HOOK_FILE_PATH=/dump-hook.sh
+      - HOOK_KEYS_DIR=/output/keys
+      - HOOK_TRUST_DIR=/output/trust
+      # Settings
+      - COMBINE_PKCS12=yes
+      - PKCS12_PASSWORD=secret
+      - PRIVATE_KEY_FILE_NAME=key
+      - PRIVATE_KEY_FILE_EXT=.pem
+      - CERTIFICATE_FILE_NAME=cert
+      - CERTIFICATE_FILE_EXT=.pem
+      - COMBINED_PEM=key+cert.pem
+      - CONVERT_KEYS_TO_RSA=no
+      - RSA_KEY_FILE_NAME=rsakey
+      - RSA_KEY_FILE_EXT=.pem
+      - OVERRIDE_UID=1000
+      - OVERRIDE_GID=1000
+      # Will extract all domains if not set, we want that.
+      #- DOMAIN=cupcake.gg,mrlicorice.xyz
+      # ENV for custom hook
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  
   arcturus:
-    ports: 
-      - "2096:2096"
-
+    # ports: 
+    #   - "2096:2096"
+    networks: [nitro, traefik]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.pixels-arcturus.entrypoints=websecure"
+      - "traefik.http.routers.pixels-arcturus.rule=Host(`$TRAEFIK_VIRTUAL_HOST_ARCTURUS`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.pixels-arcturus.service=pixels-arcturus-ws"
+      - "traefik.http.services.pixels-arcturus-ws.loadbalancer.server.port=2096"
+      # Middleware StripPrefix: rimuove /nitro
+      - "traefik.http.middlewares.pixels-arcturus-ws-strip.stripprefix.prefixes=/ws"
+      - "traefik.http.routers.pixels-arcturus.middlewares=pixels-arcturus-ws-strip"
 
   nitro:
     ports: []

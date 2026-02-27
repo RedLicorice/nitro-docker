@@ -1,0 +1,34 @@
+http:
+  middlewares:
+    secure-headers:
+      headers:
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        referrerPolicy: "no-referrer-when-downgrade"
+    
+    cors-headers:
+      headers:
+        accessControlAllowOriginList:
+          - "https://nongabbo.duckdns.org"
+          - "https://chasethe.duckdns.org"
+          - "https://squarello.duckdns.org"
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "OPTIONS"
+          - "PUT"
+          - "PATCH"
+          - "DELETE"
+        # Permetti gli header che Element cerca di inviare
+        accessControlAllowHeaders:
+          - "Content-Type"
+          - "Authorization"
+          - "X-Requested-With"
+        accessControlMaxAge: 100
+        addVaryHeader: true
+    
