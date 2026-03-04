@@ -79,6 +79,10 @@ services:
     #   - "traefik.http.routers.pixels-nitro.rule=Host(`$TRAEFIK_VIRTUAL_HOST_NITRO`)"
     #   - "traefik.http.routers.pixels-nitro.service=pixels-nitro-srv"
     #   - "traefik.http.services.pixels-nitro-srv.loadbalancer.server.port=80"
+  
+  # atomhk:
+  #   ports: []
+  #   networks: [nitro, traefik]
 
 
   db:

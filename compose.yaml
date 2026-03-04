@@ -1,6 +1,14 @@
+x-logging: &logsettings
+  driver: "json-file"
+  options:
+    max-size: "10m"      # ✅ 10MB per file
+    max-file: "3"        # 3 file rotazione = 30MB totali
+    compress: "true"     # Compressione .gz
+
 services:
   arcturus:
     image: arcturus-server
+    container_name: arcturus
     build:
       context: arcturus
     env_file:
@@ -15,9 +23,11 @@ services:
       - db
     restart: unless-stopped
     networks: [nitro]
+    logging: *logsettings
 
   nitro:
     image: nitro-client
+    container_name: nitro
     build:
       context: nitro
     env_file:
@@ -30,9 +40,11 @@ services:
       - 127.0.0.1:3000:80
     restart: unless-stopped
     networks: [nitro]
+    logging: *logsettings
 
   imager:
     image: nitro-imager
+    container_name: imager
     build:
       context: imager
     env_file:
@@ -41,17 +53,22 @@ services:
       - ./assets/:/app/assets/
     restart: unless-stopped
     networks: [nitro]
+    logging: *logsettings
 
   imgproxy:
     image: ghcr.io/willnorris/imageproxy
+    container_name: imgproxy
     volumes:
       - "./assets/usercontent/imageproxy/cache:/tmp/imageproxy"
     env_file:
       - .env
     restart: unless-stopped
     networks: [nitro]
+    logging: *logsettings
 
   cms:
+    image: atomcms
+    container_name: atomcms
     build:
       context: atomcms
     depends_on:
@@ -66,29 +83,48 @@ services:
       - "./atomcms/gamedata:/var/www/html/public/gamedata"
     restart: unless-stopped
     networks: [nitro]
+    logging: *logsettings
   
-  redis:
-    container_name: redis
-    image: redis:7-alpine
-    command: redis-server --appendonly yes --requirepass cms_redis_psw
-    volumes:
-      - ./db/redis_data:/data
-    ports:
-      - 127.0.0.1:6379:6379  # Host:Container
-    networks: [nitro]
+  # atomhk:
+  #   image: atomhk
+  #   build:
+  #     context: atomhk
+  #   depends_on:
+  #     - assets
+  #     - arcturus
+  #   ports:
+  #     - "127.0.0.1:8082:8080"
+  #   volumes:
+  #     - "./.atomhk.env:/var/www/html/.env"
+  #     - "./atomhk/storage:/var/www/html/storage/app/public"
+  #     - "./atomhk/logs:/var/www/html/storage/logs"
+  #   restart: unless-stopped
+  #   networks: [nitro]
+
+  # redis:
+  #   container_name: redis
+  #   image: redis:7-alpine
+  #   command: redis-server --appendonly yes --requirepass cms_redis_psw
+  #   volumes:
+  #     - ./db/redis_data:/data
+  #   ports:
+  #     - 127.0.0.1:6379:6379  # Host:Container
+  #   networks: [nitro]
   
-  mailhog:
-    container_name: mailhog
-    image: mailhog/mailhog:latest
-    ports:
-      - 127.0.0.1:8025:8025  # Web UI (localhost:18025)
-      - 127.0.0.1:1025:1025  # SMTP server
-    networks: [nitro]
-    logging:
-      driver: "none"  # Log silenziosi
+  # mailhog:
+  #   container_name: mailhog
+  #   image: mailhog/mailhog:latest
+  #   ports:
+  #     - 127.0.0.1:8025:8025  # Web UI (localhost:18025)
+  #     - 127.0.0.1:1025:1025  # SMTP server
+  #   networks: [nitro]
+  #   logging:
+  #     driver: "none"  # Log silenziosi
     
   db:
     image: mysql:8
+    container_name: db
+    command: --sql-mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
     depends_on:
       - backup
     env_file:
@@ -101,9 +137,11 @@ services:
       - ./db/dumps:/docker-entrypoint-initdb.d
     restart: unless-stopped
     networks: [nitro]
+    logging: *logsettings
 
   backup:
     image: tiredofit/db-backup:4.0.19
+    container_name: backup
     volumes:
       - ./db/backup:/backup
     environment:
@@ -127,9 +165,11 @@ services:
       - DB01_NAME=$MYSQL_DATABASE
     restart: unless-stopped
     networks: [nitro]
+    logging: *logsettings
 
   assets:
     image: nginx:alpine
+    container_name: assets
     restart: unless-stopped
     depends_on:
       - imager
@@ -142,6 +182,7 @@ services:
       - ./assets/nginx:/etc/nginx/conf.d/
       - ./assets/:/usr/share/nginx/html
     networks: [nitro]
+    logging: *logsettings
 
 networks:
   nitro:

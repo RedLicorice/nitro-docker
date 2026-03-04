@@ -96,7 +96,8 @@
         "cow",
         "LeetPen",
         "bbwibb",
-        "elephants"
+        "elephants",
+        "dragondog"
     ],
     "preload.assets.urls": [
         "${asset.url}/bundled/generic/avatar_additions.nitro",

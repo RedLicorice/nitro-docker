@@ -62,7 +62,7 @@ for furni in known_names:
     updates.append(furni)
 
 if updates:
-    with open("catalog_items.sql", "w", encoding='utf-8') as f:
+    with open("00-catalog_items.sql", "w", encoding='utf-8') as f:
         f.write("SET collation_connection = 'latin1_swedish_ci';\n")
         for furni in updates:
             furni_name = sqlescape(furni["name"].encode(
@@ -75,6 +75,6 @@ if updates:
             updated_cnt+=1
 
 if updated_cnt > 0:
-    print(f"catalog_items.sql updated!")
+    print(f"00-catalog_items.sql updated!")
 else:
-    print(f"catalog_items.sql unchanged!")
+    print(f"00-catalog_items.sql unchanged!")

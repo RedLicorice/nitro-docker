@@ -19,6 +19,12 @@ atomcms/logs/*
 !atomcms/cache/.gitkeep
 !atomcms/storage/.gitkeep
 !atomcms/logs/.gitkeep
+atomhk/cache/*
+atomhk/storage/*
+atomhk/logs/*
+!atomhk/cache/.gitkeep
+!atomhk/storage/.gitkeep
+!atomhk/logs/.gitkeep
 *.env
 nitro/*.json
 !example-*
@@ -26,3 +32,6 @@ assets/roomitemtypes.json
 assets/wallitemtypes.json
 atomcms/gamedata/*
 !atomcms/gamedata/.gitkeep
+atomhk/gamedata/*
+!atomhk/gamedata/.gitkeep
+*.lock

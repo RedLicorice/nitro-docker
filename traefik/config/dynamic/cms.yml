@@ -8,10 +8,29 @@ http:
       tls:
         certResolver: myresolver
       priority: 1
-
+    housekeeping:
+      entryPoints:
+        - websecure
+      rule: "Host(`nongabbo.duckdns.org`) && PathPrefix(`/housekeeping`)"
+      service: "atomhk"
+      middlewares:
+        - atom-strip-hk-prefix
+      tls:
+        certResolver: myresolver
+      priority: 1
+  middlewares:
+    atom-strip-hk-prefix:
+      stripPrefix:
+        prefixes:
+          - "/housekeeping"
   services:
     cms:
       loadBalancer:
         servers:
           - url: "http://cms:8080"
+        passHostHeader: true
+    atomhk:
+      loadBalancer:
+        servers:
+          - url: "http://atomhk:8080"
         passHostHeader: true
